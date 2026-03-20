@@ -92,3 +92,17 @@ canvas {
     padding: 10px;
     margin-top: 20px;
 }
+
+.trip-img {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 15px;
+    margin: 20px auto;
+    display: block;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    transition: transform 0.3s;
+}
+
+.trip-img:hover {
+    transform: scale(1.05);
+}
