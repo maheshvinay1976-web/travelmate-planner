@@ -1,20 +1,47 @@
-<h2>Your Trips</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
 
-<a href="/planner">Plan New Trip</a> |
-<a href="/logout">Logout</a>
+<div class="container">
 
-<table border="1">
-<tr>
-    <th>Destination</th>
-    <th>Days</th>
-    <th>Cost</th>
-</tr>
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
 
-{% for trip in trips %}
-<tr>
-    <td>{{ trip[2] }}</td>
-    <td>{{ trip[3] }}</td>
-    <td>₹{{ trip[6] }}</td>
-</tr>
-{% endfor %}
-</table>
+    <h2>📂 Your Trips</h2>
+
+    <a href="/planner"><button>➕ Plan New Trip</button></a>
+    <a href="/logout"><button>🚪 Logout</button></a>
+
+    <table>
+        <tr>
+            <th>Destination</th>
+            <th>Days</th>
+            <th>Cost</th>
+        </tr>
+
+        {% for trip in trips %}
+        <tr>
+            <td>{{ trip[2] }}</td>
+            <td>{{ trip[3] }}</td>
+            <td>₹{{ trip[6] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</div>
+
+<footer class="footer">
+    <p>© 2026 TravelMate Planner | Developed by Vinay M</p>
+</footer>
+
+</body>
+</html>
