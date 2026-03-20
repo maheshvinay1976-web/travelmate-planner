@@ -6,15 +6,27 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-<p>✈ Plan Smart • 💰 Save Money • 🌍 Travel Better</p>
-    <div class="container">
-        <h1>🌍 TravelMate Planner</h1>
-<p style="font-size:18px;">Plan Smart • Save Money • Travel Better ✈</p>
 
-<a href="/login"><button>Login</button></a>
-<a href="/register"><button>Register</button></a>
-        </div>
-    </div>
+<div class="container">
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <h1>🌍 TravelMate Planner</h1>
+    <p>Plan Smart • Save Money • Travel Better ✈</p>
+
+    <a href="/login"><button>Login</button></a>
+    <a href="/register"><button>Register</button></a>
+
+</div>
+
+<footer class="footer">
+    <p>© 2026 TravelMate Planner | Developed by Vinay M</p>
+</footer>
 
 </body>
 </html>
