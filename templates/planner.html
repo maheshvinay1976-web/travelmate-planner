@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Plan Your Trip</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h2>🧳 Plan Your Trip</h2>
+
+        <form action="/result" method="POST" class="form-box">
+
+            <label>Destination:</label>
+            <input type="text" name="destination" placeholder="Enter place (e.g., Goa)" required>
+
+            <label>Number of Days:</label>
+            <input type="number" name="days" min="1" required>
+
+            <label>Number of People:</label>
+            <input type="number" name="people" min="1" required>
+
+            <label>Your Budget (₹):</label>
+            <input type="number" name="budget" min="0" required>
+
+            <button type="submit">Calculate Trip</button>
+        </form>
+
+        <br>
+        <a href="/dashboard"><button>⬅ Back to Dashboard</button></a>
+    </div>
+
+</body>
+</html>
