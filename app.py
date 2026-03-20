@@ -1,28 +1,38 @@
 from flask import Flask, render_template, request, redirect, session, flash
-import sqlite3
+import psycopg2
 import os
 
 app = Flask(__name__)
-app.secret_key = "secret123"   # Required for flash & session
+app.secret_key = "secret123"
 
-# ---------------- DATABASE ----------------
+# ---------------- DATABASE CONNECTION ----------------
+def get_db_connection():
+    return psycopg2.connect(os.environ.get("DATABASE_URL"))
+
+# ---------------- INIT DATABASE ----------------
 def init_db():
-    conn = sqlite3.connect('database.db')
+    conn = get_db_connection()
     cur = conn.cursor()
 
-    cur.execute('''CREATE TABLE IF NOT EXISTS users(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS users(
+        id SERIAL PRIMARY KEY,
         username TEXT,
-        password TEXT)''')
+        password TEXT
+    )
+    """)
 
-    cur.execute('''CREATE TABLE IF NOT EXISTS trips(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS trips(
+        id SERIAL PRIMARY KEY,
         username TEXT,
         destination TEXT,
         days INTEGER,
         people INTEGER,
         budget INTEGER,
-        total_cost INTEGER)''')
+        total_cost INTEGER
+    )
+    """)
 
     conn.commit()
     conn.close()
@@ -35,23 +45,22 @@ def home():
     return render_template('index.html')
 
 # ---------------- REGISTER ----------------
-@app.route('/register', methods=['GET','POST'])
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         user = request.form['username']
         pwd = request.form['password']
 
-        conn = sqlite3.connect('database.db')
+        conn = get_db_connection()
         cur = conn.cursor()
 
-        # Check if user already exists
-        cur.execute("SELECT * FROM users WHERE username=?", (user,))
+        cur.execute("SELECT * FROM users WHERE username=%s", (user,))
         existing = cur.fetchone()
 
         if existing:
             flash("Username already exists!", "error")
         else:
-            cur.execute("INSERT INTO users(username,password) VALUES(?,?)",(user,pwd))
+            cur.execute("INSERT INTO users(username,password) VALUES(%s,%s)", (user, pwd))
             conn.commit()
             flash("Registration successful! Please login.", "success")
 
@@ -61,15 +70,16 @@ def register():
     return render_template('register.html')
 
 # ---------------- LOGIN ----------------
-@app.route('/login', methods=['GET','POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         user = request.form['username']
         pwd = request.form['password']
 
-        conn = sqlite3.connect('database.db')
+        conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute("SELECT * FROM users WHERE username=? AND password=?", (user, pwd))
+
+        cur.execute("SELECT * FROM users WHERE username=%s AND password=%s", (user, pwd))
         data = cur.fetchone()
         conn.close()
 
@@ -89,13 +99,25 @@ def dashboard():
         flash("Please login first!", "error")
         return redirect('/login')
 
-    conn = sqlite3.connect('database.db')
+    conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute("SELECT * FROM trips WHERE username=?", (session['user'],))
+
+    cur.execute("SELECT * FROM trips WHERE username=%s", (session['user'],))
     trips = cur.fetchall()
+
+    # Analytics
+    cur.execute("SELECT SUM(total_cost) FROM trips WHERE username=%s", (session['user'],))
+    total_spent = cur.fetchone()[0] or 0
+
+    cur.execute("SELECT COUNT(*) FROM trips WHERE username=%s", (session['user'],))
+    total_trips = cur.fetchone()[0]
+
     conn.close()
 
-    return render_template('dashboard.html', trips=trips)
+    return render_template('dashboard.html',
+                           trips=trips,
+                           total_spent=total_spent,
+                           total_trips=total_trips)
 
 # ---------------- PLANNER ----------------
 @app.route('/planner')
@@ -122,23 +144,38 @@ def result():
     hotel = days * 1500
     food = days * 500 * people
     travel = 2000 * people
-
     total = hotel + food + travel
 
-    conn = sqlite3.connect('database.db')
+    # 🔥 FIXED Suggestion Logic
+    if total > budget:
+        suggestion = "⚠ Your budget is low. Consider reducing days or expenses."
+    elif total < budget * 0.5:
+        suggestion = "💡 You can upgrade your trip with better hotels!"
+    else:
+        suggestion = "✅ Your budget is perfect!"
+
+    conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute("""INSERT INTO trips(username,destination,days,people,budget,total_cost)
-                   VALUES(?,?,?,?,?,?)""",
-                (session['user'], destination, days, people, budget, total))
+
+    cur.execute("""
+        INSERT INTO trips(username,destination,days,people,budget,total_cost)
+        VALUES(%s,%s,%s,%s,%s,%s)
+    """, (session['user'], destination, days, people, budget, total))
+
     conn.commit()
     conn.close()
 
     flash("Trip calculated successfully!", "success")
 
+    # ✅ IMPORTANT: Passing suggestion to HTML
     return render_template('result.html',
                            destination=destination,
                            total=total,
-                           budget=budget)
+                           budget=budget,
+                           hotel=hotel,
+                           food=food,
+                           travel=travel,
+                           suggestion=suggestion)
 
 # ---------------- LOGOUT ----------------
 @app.route('/logout')
