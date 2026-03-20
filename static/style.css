@@ -85,3 +85,10 @@ th, td {
     background: rgba(0,0,0,0.6);
     font-size: 14px;
     }
+
+canvas {
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 20px;
+}
