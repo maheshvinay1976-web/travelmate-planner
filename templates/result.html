@@ -22,25 +22,48 @@
 
         <h3>{{ destination }}</h3>
 
-        <!-- 🌍 Fixed Image -->
-        <img src="https://picsum.photos/400/300?random={{ destination|length }}" 
-     style="border-radius:10px; margin:20px; width:100%; max-width:350px;">
+        <!-- 🌍 Advanced Image System -->
+        {% set place = destination.lower() %}
+
+        {% if "goa" in place %}
+            <img src="https://images.unsplash.com/photo-1587922546307-776227941871" class="trip-img">
+
+        {% elif "paris" in place %}
+            <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34" class="trip-img">
+
+        {% elif "manali" in place %}
+            <img src="https://images.unsplash.com/photo-1605540436563-5bca919ae766" class="trip-img">
+
+        {% elif "delhi" in place %}
+            <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5" class="trip-img">
+
+        {% elif "mumbai" in place %}
+            <img src="https://images.unsplash.com/photo-1562979314-bee7453e911c" class="trip-img">
+
+        {% elif "bangalore" in place %}
+            <img src="https://images.unsplash.com/photo-1581093588401-22d1c8bcb78f" class="trip-img">
+
+        {% else %}
+            <img src="https://picsum.photos/400/300" class="trip-img">
+        {% endif %}
+
+        <!-- 💰 Details -->
         <p>💰 Total Cost: ₹{{ total }}</p>
         <p>🎯 Budget: ₹{{ budget }}</p>
 
-        # Smart suggestion
-if total > budget:
-    suggestion = "Your budget is low. Consider reducing days or expenses."
-elif total < budget * 0.5:
-    suggestion = "You can upgrade your trip with better hotels!"
-else:
-    suggestion = "Your budget is perfect!"
-        
+        {% if total > budget %}
+            <p class="warning">⚠ Budget Exceeded</p>
+        {% else %}
+            <p class="success">✅ Perfect Plan</p>
+        {% endif %}
+
+        <!-- 🤖 Suggestion -->
+        <p style="font-weight:bold;">🤖 Suggestion: {{ suggestion }}</p>
+
     </div>
 
-    <!-- 📊 Chart Section -->
+    <!-- 📊 Chart -->
     <h3>📊 Expense Breakdown</h3>
-
     <canvas id="myChart" width="300" height="300"></canvas>
 
     <br>
@@ -56,10 +79,9 @@ else:
     <p>© 2026 TravelMate Planner | Developed by Vinay M</p>
 </footer>
 
-<!-- Chart.js CDN -->
+<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<!-- Chart Script -->
 <script>
 var ctx = document.getElementById('myChart').getContext('2d');
 
