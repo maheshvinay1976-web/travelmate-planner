@@ -3,10 +3,11 @@ body {
     font-family: 'Segoe UI', sans-serif;
     margin: 0;
     padding: 0;
-    background: linear-gradient(to right, #141e30, #243b55);
+    text-align: center;
     color: white;
-}
 
+    background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e') no-repeat center center/cover;
+}
 /* Center Container */
 .container {
     text-align: center;
@@ -46,13 +47,13 @@ button:active {
 }
 
 /* Form Box */
-.form-box {
-    background: rgba(255, 255, 255, 0.1);
+.form-box, .result-box {
+    background: rgba(0, 0, 0, 0.6);
     padding: 25px;
     margin: auto;
     width: 320px;
     border-radius: 15px;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
 }
 
 /* Inputs */
@@ -63,16 +64,6 @@ input {
     border-radius: 8px;
     border: none;
     outline: none;
-}
-
-/* Result Box */
-.result-box {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 25px;
-    width: 320px;
-    margin: auto;
-    border-radius: 15px;
-    backdrop-filter: blur(10px);
 }
 
 /* Status Colors */
