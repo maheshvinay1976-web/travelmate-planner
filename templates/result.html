@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Trip Result</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h2>📊 Trip Summary</h2>
+
+        <div class="result-box">
+            <p><strong>Destination:</strong> {{ destination }}</p>
+            <p><strong>Estimated Cost:</strong> ₹{{ total }}</p>
+            <p><strong>Your Budget:</strong> ₹{{ budget }}</p>
+
+            {% if total > budget %}
+                <p class="warning">⚠ Budget Exceeded!</p>
+            {% else %}
+                <p class="success">✅ Within Budget</p>
+            {% endif %}
+        </div>
+
+        <br>
+
+        <a href="/planner"><button>🔁 Plan Another Trip</button></a>
+        <a href="/dashboard"><button>📂 View Dashboard</button></a>
+
+    </div>
+
+</body>
+</html>
