@@ -28,15 +28,14 @@
         <p>💰 Total Cost: ₹{{ total }}</p>
         <p>🎯 Budget: ₹{{ budget }}</p>
 
-        {% if total > budget %}
-            <p class="warning">⚠ Budget Exceeded</p>
-        {% else %}
-            <p class="success">✅ Perfect Plan</p>
-        {% endif %}
-
-        <!-- 🤖 Suggestion -->
-        <p style="font-weight:bold;">🤖 Suggestion: {{ suggestion }}</p>
-
+        # Smart suggestion
+if total > budget:
+    suggestion = "Your budget is low. Consider reducing days or expenses."
+elif total < budget * 0.5:
+    suggestion = "You can upgrade your trip with better hotels!"
+else:
+    suggestion = "Your budget is perfect!"
+        
     </div>
 
     <!-- 📊 Chart Section -->
