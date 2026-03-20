@@ -1,0 +1,99 @@
+/* General Page Styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    background: linear-gradient(to right, #4facfe, #00f2fe);
+    color: white;
+}
+
+/* Container */
+.container {
+    margin-top: 80px;
+}
+
+/* Headings */
+h1, h2 {
+    margin-bottom: 20px;
+}
+
+/* Buttons */
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    background: #2c3e50;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+button:hover {
+    background: #1a252f;
+}
+
+/* Form Box */
+.form-box {
+    background: white;
+    padding: 20px;
+    margin: auto;
+    width: 300px;
+    border-radius: 10px;
+    color: black;
+}
+
+/* Input Fields */
+input {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+/* Labels */
+label {
+    font-weight: bold;
+}
+
+/* Result Box */
+.result-box {
+    background: white;
+    padding: 20px;
+    width: 300px;
+    margin: auto;
+    border-radius: 10px;
+    color: black;
+}
+
+/* Success & Warning */
+.success {
+    color: green;
+    font-weight: bold;
+}
+
+.warning {
+    color: red;
+    font-weight: bold;
+}
+
+/* Table (Dashboard) */
+table {
+    margin: auto;
+    border-collapse: collapse;
+    width: 70%;
+    background: white;
+    color: black;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+th {
+    background: #2c3e50;
+    color: white;
+}
