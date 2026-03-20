@@ -23,9 +23,8 @@
         <h3>{{ destination }}</h3>
 
         <!-- 🌍 Fixed Image -->
-        <img src="https://source.unsplash.com/featured/?travel,{{ destination }}" 
-             style="border-radius:10px; margin:20px; width:100%; max-width:350px;">
-
+        <img src="https://picsum.photos/400/300?random={{ destination|length }}" 
+     style="border-radius:10px; margin:20px; width:100%; max-width:350px;">
         <p>💰 Total Cost: ₹{{ total }}</p>
         <p>🎯 Budget: ₹{{ budget }}</p>
 
