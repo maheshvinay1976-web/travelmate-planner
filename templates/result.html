@@ -22,9 +22,9 @@
 
         <h3>{{ destination }}</h3>
 
-        <!-- 🌍 Dynamic Image -->
-<img src="https://source.unsplash.com/featured/?travel,{{ destination }}" 
-     style="border-radius:10px; margin:20px; width:100%; max-width:350px;">
+        <!-- 🌍 Fixed Image -->
+        <img src="https://source.unsplash.com/featured/?travel,{{ destination }}" 
+             style="border-radius:10px; margin:20px; width:100%; max-width:350px;">
 
         <p>💰 Total Cost: ₹{{ total }}</p>
         <p>🎯 Budget: ₹{{ budget }}</p>
@@ -40,12 +40,14 @@
 
     </div>
 
-    <!-- 📊 Chart -->
+    <!-- 📊 Chart Section -->
     <h3>📊 Expense Breakdown</h3>
+
     <canvas id="myChart" width="300" height="300"></canvas>
 
-    <!-- Buttons -->
     <br>
+
+    <!-- Buttons -->
     <a href="/planner"><button>🔄 Plan Again</button></a>
     <a href="/dashboard"><button>📂 Dashboard</button></a>
 
@@ -56,18 +58,24 @@
     <p>© 2026 TravelMate Planner | Developed by Vinay M</p>
 </footer>
 
-<!-- Chart.js -->
+<!-- Chart.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<!-- Chart Script -->
 <script>
 var ctx = document.getElementById('myChart').getContext('2d');
 
-var chart = new Chart(ctx, {
+new Chart(ctx, {
     type: 'pie',
     data: {
         labels: ['Hotel 🏨', 'Food 🍔', 'Travel 🚗'],
         datasets: [{
             data: [{{ hotel }}, {{ food }}, {{ travel }}],
+            backgroundColor: [
+                '#ff6a00',
+                '#00c851',
+                '#33b5e5'
+            ]
         }]
     }
 });
