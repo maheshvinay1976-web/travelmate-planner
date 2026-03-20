@@ -7,27 +7,71 @@
 </head>
 <body>
 
-    <div class="container">
-        <h2>📊 Trip Summary</h2>
+<div class="container">
 
-        <div class="result-box">
-            <p><strong>Destination:</strong> {{ destination }}</p>
-            <p><strong>Estimated Cost:</strong> ₹{{ total }}</p>
-            <p><strong>Your Budget:</strong> ₹{{ budget }}</p>
+    <!-- 🔔 Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
 
-            {% if total > budget %}
-                <p class="warning">⚠ Budget Exceeded!</p>
-            {% else %}
-                <p class="success">✅ Within Budget</p>
-            {% endif %}
-        </div>
+    <h2>📊 Trip Summary</h2>
 
-        <br>
+    <div class="result-box">
 
-        <a href="/planner"><button>🔁 Plan Another Trip</button></a>
-        <a href="/dashboard"><button>📂 View Dashboard</button></a>
+        <h3>{{ destination }}</h3>
+
+        <!-- 🌍 Dynamic Image -->
+        <img src="https://source.unsplash.com/400x300/?{{ destination }}" 
+             style="border-radius:10px; margin:20px;">
+
+        <p>💰 Total Cost: ₹{{ total }}</p>
+        <p>🎯 Budget: ₹{{ budget }}</p>
+
+        {% if total > budget %}
+            <p class="warning">⚠ Budget Exceeded</p>
+        {% else %}
+            <p class="success">✅ Perfect Plan</p>
+        {% endif %}
+
+        <!-- 🤖 Suggestion -->
+        <p style="font-weight:bold;">🤖 Suggestion: {{ suggestion }}</p>
 
     </div>
+
+    <!-- 📊 Chart -->
+    <h3>📊 Expense Breakdown</h3>
+    <canvas id="myChart" width="300" height="300"></canvas>
+
+    <!-- Buttons -->
+    <br>
+    <a href="/planner"><button>🔄 Plan Again</button></a>
+    <a href="/dashboard"><button>📂 Dashboard</button></a>
+
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <p>© 2026 TravelMate Planner | Developed by Vinay M</p>
+</footer>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+var ctx = document.getElementById('myChart').getContext('2d');
+
+var chart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+        labels: ['Hotel 🏨', 'Food 🍔', 'Travel 🚗'],
+        datasets: [{
+            data: [{{ hotel }}, {{ food }}, {{ travel }}],
+        }]
+    }
+});
+</script>
 
 </body>
 </html>
