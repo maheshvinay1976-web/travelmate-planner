@@ -1,0 +1,20 @@
+<h2>Your Trips</h2>
+
+<a href="/planner">Plan New Trip</a> |
+<a href="/logout">Logout</a>
+
+<table border="1">
+<tr>
+    <th>Destination</th>
+    <th>Days</th>
+    <th>Cost</th>
+</tr>
+
+{% for trip in trips %}
+<tr>
+    <td>{{ trip[2] }}</td>
+    <td>{{ trip[3] }}</td>
+    <td>₹{{ trip[6] }}</td>
+</tr>
+{% endfor %}
+</table>
