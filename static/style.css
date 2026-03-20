@@ -1,27 +1,14 @@
-/* Background */
 body {
     font-family: 'Segoe UI', sans-serif;
     margin: 0;
     padding: 0;
     text-align: center;
     color: white;
-
     background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e') no-repeat center center/cover;
 }
-/* Center Container */
+
 .container {
-    text-align: center;
     margin-top: 80px;
-}
-
-/* Headings */
-h1 {
-    font-size: 40px;
-    margin-bottom: 10px;
-}
-
-h2 {
-    margin-bottom: 20px;
 }
 
 /* Buttons */
@@ -31,22 +18,19 @@ button {
     border: none;
     background: linear-gradient(45deg, #ff6a00, #ee0979);
     color: white;
-    cursor: pointer;
     border-radius: 25px;
-    font-size: 16px;
-    transition: 0.3s;
+    cursor: pointer;
 }
 
 button:hover {
     transform: scale(1.05);
-    box-shadow: 0 0 10px rgba(255,255,255,0.5);
 }
 
 button:active {
     transform: scale(0.95);
 }
 
-/* Form Box */
+/* Form & Result Box */
 .form-box, .result-box {
     background: rgba(0, 0, 0, 0.6);
     padding: 25px;
@@ -63,38 +47,41 @@ input {
     margin: 10px 0;
     border-radius: 8px;
     border: none;
-    outline: none;
-}
-
-/* Status Colors */
-.success {
-    color: #00ffcc;
-    font-weight: bold;
-}
-
-.warning {
-    color: #ff4d4d;
-    font-weight: bold;
 }
 
 /* Table */
 table {
     margin: auto;
-    border-collapse: collapse;
     width: 80%;
-    background: rgba(255,255,255,0.1);
+    background: rgba(0,0,0,0.6);
     border-radius: 10px;
-    overflow: hidden;
 }
 
 th, td {
+    padding: 10px;
+}
+
+/* Flash Messages */
+.flash {
+    width: 300px;
+    margin: 10px auto;
     padding: 12px;
+    border-radius: 8px;
+    font-weight: bold;
 }
 
-th {
-    background: #ff6a00;
+.flash.success {
+    background: green;
 }
 
-tr:hover {
-    background: rgba(255,255,255,0.2);
+.flash.error {
+    background: red;
 }
+
+/* Footer */
+.footer {
+    margin-top: 60px;
+    padding: 15px;
+    background: rgba(0,0,0,0.6);
+    font-size: 14px;
+    }
