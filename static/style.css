@@ -1,48 +1,137 @@
+/* Background */
 body {
-    font-family: Arial;
-    text-align: center;
-    background: linear-gradient(to right, #141e30, #243b55);
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #1d2671, #c33764);
     color: white;
 }
 
-form {
-    background: rgba(255,255,255,0.1);
-    padding: 20px;
-    margin: auto;
-    width: 300px;
-    border-radius: 10px;
+/* Centering */
+body, html {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-input, button {
+/* Glass card */
+form, .container, .result-box {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    width: 320px;
+    text-align: center;
+}
+
+/* Heading */
+h2 {
+    margin-bottom: 20px;
+}
+
+/* Inputs */
+input {
     width: 90%;
-    padding: 10px;
-    margin: 10px;
-}
-
-button {
-    background: orange;
-    border: none;
-    cursor: pointer;
-}
-
-table {
-    margin: auto;
-    background: white;
-    color: black;
-}
-
-.delete-btn {
-    background: none;
-    color: red;
-    font-size: 20px;
-    border: none;
-    cursor: pointer;
-}
-
-.flash.success { background: green; padding:10px; }
-.flash.error { background: red; padding:10px; }
-
-.trip-img {
-    width: 300px;
+    padding: 12px;
+    margin: 10px 0;
     border-radius: 10px;
+    border: none;
+    outline: none;
+}
+
+/* Button */
+button {
+    width: 95%;
+    padding: 12px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(45deg, #ff6a00, #ee0979);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+/* Links */
+a {
+    color: #ffd700;
+    text-decoration: none;
+}
+
+/* Dashboard */
+table {
+    margin-top: 20px;
+    border-collapse: collapse;
+    width: 90%;
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+}
+
+th {
+    background: rgba(0,0,0,0.3);
+}
+
+/* Delete button */
+.delete-btn {
+    background: transparent;
+    color: red;
+    font-size: 22px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.delete-btn:hover {
+    color: darkred;
+    transform: scale(1.2);
+}
+
+/* Flash messages */
+.flash {
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 10px;
+}
+
+.flash.success {
+    background: #00c851;
+}
+
+.flash.error {
+    background: #ff4444;
+}
+
+/* Image */
+.trip-img {
+    width: 100%;
+    max-width: 350px;
+    border-radius: 15px;
+    margin-top: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+}
+
+/* Navbar style */
+.navbar {
+    position: absolute;
+    top: 20px;
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.navbar a {
+    margin: 0 10px;
+    font-weight: bold;
 }
