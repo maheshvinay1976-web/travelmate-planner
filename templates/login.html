@@ -1,32 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login - TravelMate</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-<div class="navbar">
-    <div>🌍 TravelMate</div>
-    <div>
-        <a href="index.html">Home</a>
-        <a href="login.html">Login</a>
-        <a href="register.html">Register</a>
-    </div>
+{% extends 'base.html' %}
+{% block content %}
+<div class="glass-card auth-card">
+    <h2>Login</h2>
+    <form method="POST">
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+    <p>Don't have an account? <a href="{{ url_for('register') }}">Register</a></p>
 </div>
-
-<div class="container">
-    <div class="card">
-        <h2>Login to TravelMate</h2>
-        <form>
-            <input type="text" placeholder="Username" required>
-            <input type="password" placeholder="Password" required>
-            <button class="button" type="submit">Login</button>
-        </form>
-    </div>
-</div>
-
-</body>
-</html>
+{% endblock %}
