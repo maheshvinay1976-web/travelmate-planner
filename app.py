@@ -99,8 +99,11 @@ def logout():
     session.clear()
     flash("Logged out successfully!", "success")
     return redirect(url_for('login'))
+import os
 
 if __name__ == '__main__':
     if not os.path.exists("database.db"):
         db.create_all()
-    app.run(debug=True)
+    
+    port = int(os.environ.get("PORT", 5000))  # Use Render's port
+    app.run(host='0.0.0.0', port=port, debug=True)
