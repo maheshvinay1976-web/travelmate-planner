@@ -75,11 +75,42 @@ def plan():
         return redirect(url_for('login'))
     
     if request.method == 'POST':
-        # Example: Collect trip info
         destination = request.form['destination']
-        days = request.form['days']
-        flash(f"Trip to {destination} planned for {days} days!", "success")
-        return redirect(url_for('result', destination=destination, days=days))
+        days = int(request.form['days'])
+        budget = int(request.form['budget'])
+
+        # Example: simple calculation of total cost
+        cost_per_day = 5000  # hotel + food + travel
+        total_cost = cost_per_day * days
+
+        # Check budget
+        if total_cost > budget:
+            status = "Budget Exceeded"
+            suggestion = f"Consider reducing stay by {((total_cost-budget)//cost_per_day)} days or cheaper options."
+        else:
+            status = "Within Budget"
+            suggestion = "Your budget is sufficient!"
+
+        # Expense breakdown
+        breakdown = {
+            "Hotel": 0.5 * total_cost,
+            "Food": 0.3 * total_cost,
+            "Travel": 0.2 * total_cost
+        }
+
+        # Pass all info to result page
+        return redirect(url_for(
+            'result',
+            destination=destination,
+            days=days,
+            total_cost=total_cost,
+            budget=budget,
+            status=status,
+            suggestion=suggestion,
+            hotel=breakdown["Hotel"],
+            food=breakdown["Food"],
+            travel=breakdown["Travel"]
+        ))
     return render_template('planner.html')
 
 # Result Page
@@ -88,11 +119,29 @@ def result():
     if 'user_id' not in session:
         flash("Please login first!", "warning")
         return redirect(url_for('login'))
-    
+
+    # Get all trip info from query parameters
     destination = request.args.get('destination')
     days = request.args.get('days')
-    return render_template('result.html', destination=destination, days=days)
+    total_cost = request.args.get('total_cost')
+    budget = request.args.get('budget')
+    status = request.args.get('status')
+    suggestion = request.args.get('suggestion')
+    hotel = request.args.get('hotel')
+    food = request.args.get('food')
+    travel = request.args.get('travel')
 
+    flash("Trip calculated successfully!", "success")
+    return render_template('result.html',
+                           destination=destination,
+                           days=days,
+                           total_cost=total_cost,
+                           budget=budget,
+                           status=status,
+                           suggestion=suggestion,
+                           hotel=hotel,
+                           food=food,
+                           travel=travel)
 # Logout
 @app.route('/logout')
 def logout():
