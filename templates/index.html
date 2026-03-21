@@ -1,32 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>TravelMate Planner</title>
+    <title>Login</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 
-<div class="container">
+<form method="POST" action="/login">
+    <h2>Login</h2>
 
-    <!-- Flash Messages -->
     {% with messages = get_flashed_messages(with_categories=true) %}
-      {% for category, message in messages %}
+    {% for category, message in messages %}
         <div class="flash {{ category }}">{{ message }}</div>
-      {% endfor %}
+    {% endfor %}
     {% endwith %}
 
-    <h1>🌍 TravelMate Planner</h1>
-    <p>Plan Smart • Save Money • Travel Better ✈</p>
+    <input name="username" placeholder="Username" required>
+    <input type="password" name="password" placeholder="Password" required>
 
-    <a href="/login"><button>Login</button></a>
-    <a href="/register"><button>Register</button></a>
+    <button type="submit">Login</button>
 
-</div>
-
-<footer class="footer">
-    <p>© 2026 TravelMate Planner | Developed by Vinay M</p>
-</footer>
+    <p>New user? <a href="/register">Register</a></p>
+</form>
 
 </body>
 </html>
