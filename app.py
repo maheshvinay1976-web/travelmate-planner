@@ -102,8 +102,9 @@ def logout():
 import os
 
 if __name__ == '__main__':
-    if not os.path.exists("database.db"):
+    # Ensure tables exist
+    with app.app_context():
         db.create_all()
     
-    port = int(os.environ.get("PORT", 5000))  # Use Render's port
+    port = int(os.environ.get("PORT", 5000))  # Use Render's dynamic port
     app.run(host='0.0.0.0', port=port, debug=True)
