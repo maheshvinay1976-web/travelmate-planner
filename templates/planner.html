@@ -1,40 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Plan a Trip - TravelMate</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-<div class="navbar">
-    <div>🌍 TravelMate</div>
-    <div>
-        <a href="dashboard.html">Dashboard</a>
-        <a href="plan.html">Plan</a>
-        <a href="profile.html">Profile</a>
-        <a href="logout.html">Logout</a>
-    </div>
+{% extends 'base.html' %}
+{% block content %}
+<div class="glass-card planner-card">
+    <h2>Plan Your Trip</h2>
+    <form method="POST">
+        <input type="text" name="destination" placeholder="Destination" required>
+        <input type="number" name="days" placeholder="Number of Days" required>
+        <button type="submit" class="btn btn-success">Plan Trip</button>
+    </form>
 </div>
-
-<div class="container">
-    <h1>Plan Your Trip</h1>
-    <div class="card">
-        <form>
-            <label>Destination:</label>
-            <input type="text" placeholder="Enter city or country" required>
-
-            <label>Start Date:</label>
-            <input type="date" required>
-
-            <label>End Date:</label>
-            <input type="date" required>
-
-            <button class="button" type="submit">Save Trip</button>
-        </form>
-    </div>
-</div>
-
-</body>
-</html>
+{% endblock %}
