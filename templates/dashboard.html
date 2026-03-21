@@ -1,38 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard - TravelMate</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-<div class="navbar">
-    <div>🌍 TravelMate</div>
-    <div>
-        <a href="dashboard.html">Dashboard</a>
-        <a href="plan.html">Plan</a>
-        <a href="profile.html">Profile</a>
-        <a href="logout.html">Logout</a>
-    </div>
+{% extends 'base.html' %}
+{% block content %}
+<div class="glass-card dashboard-card">
+    <h2>Hello, {{ session.get('username') }}!</h2>
+    <p>Welcome to your dashboard.</p>
+    <a href="{{ url_for('plan') }}" class="btn btn-warning">Plan a Trip</a>
 </div>
-
-<div class="container">
-    <h1>Welcome to Your Dashboard</h1>
-    <p>Manage your trips, see recommendations, and stay inspired!</p>
-
-    <div class="card">
-        <h2>Upcoming Trips</h2>
-        <p>You have no trips planned yet.</p>
-        <a href="plan.html" class="button">Plan a Trip</a>
-    </div>
-
-    <div class="card">
-        <h2>Travel Insights</h2>
-        <p>Explore travel articles, tips, and new destinations.</p>
-    </div>
-</div>
-
-</body>
-</html>
+{% endblock %}
