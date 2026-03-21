@@ -3,19 +3,21 @@ import psycopg2
 import os
 
 app = Flask(__name__)
-app.secret_key = "secret123"
+app.secret_key = "secret123"   # change later for security
 
-# ---------------- DATABASE CONNECTION ----------------
+
+# ✅ DATABASE CONNECTION
 def get_db_connection():
     return psycopg2.connect(os.environ.get("DATABASE_URL"))
 
-# ---------------- INIT DATABASE ----------------
+
+# ✅ CREATE TABLES (RUN ON START)
 def init_db():
     conn = get_db_connection()
     cur = conn.cursor()
 
     cur.execute("""
-    CREATE TABLE IF NOT EXISTS users(
+    CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
         username TEXT,
         password TEXT
@@ -23,76 +25,129 @@ def init_db():
     """)
 
     cur.execute("""
-    CREATE TABLE IF NOT EXISTS trips(
+    CREATE TABLE IF NOT EXISTS trips (
         id SERIAL PRIMARY KEY,
         username TEXT,
         destination TEXT,
         days INTEGER,
-        people INTEGER,
-        budget INTEGER,
         total_cost INTEGER
     )
     """)
 
     conn.commit()
+    cur.close()
     conn.close()
+
 
 init_db()
 
-# ---------------- HOME ----------------
+
+# ✅ HOME → LOGIN PAGE
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return redirect('/login')
 
-# ---------------- REGISTER ----------------
+
+# ✅ REGISTER
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        user = request.form['username']
-        pwd = request.form['password']
+        username = request.form['username']
+        password = request.form['password']
 
         conn = get_db_connection()
         cur = conn.cursor()
 
-        cur.execute("SELECT * FROM users WHERE username=%s", (user,))
-        existing = cur.fetchone()
+        cur.execute("INSERT INTO users (username, password) VALUES (%s, %s)",
+                    (username, password))
 
-        if existing:
-            flash("Username already exists!", "error")
-        else:
-            cur.execute("INSERT INTO users(username,password) VALUES(%s,%s)", (user, pwd))
-            conn.commit()
-            flash("Registration successful! Please login.", "success")
-
+        conn.commit()
+        cur.close()
         conn.close()
+
+        flash("Registration successful! Please login.", "success")
         return redirect('/login')
 
     return render_template('register.html')
 
-# ---------------- LOGIN ----------------
+
+# ✅ LOGIN
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        user = request.form['username']
-        pwd = request.form['password']
+        username = request.form['username']
+        password = request.form['password']
 
         conn = get_db_connection()
         cur = conn.cursor()
 
-        cur.execute("SELECT * FROM users WHERE username=%s AND password=%s", (user, pwd))
-        data = cur.fetchone()
+        cur.execute("SELECT * FROM users WHERE username=%s AND password=%s",
+                    (username, password))
+        user = cur.fetchone()
+
         conn.close()
 
-        if data:
-            session['user'] = user
+        if user:
+            session['user'] = username
             flash("Login successful!", "success")
-            return redirect('/dashboard')
+            return redirect('/index')
         else:
             flash("Invalid username or password", "error")
 
     return render_template('login.html')
 
-# ---------------- DASHBOARD ----------------
+
+# ✅ LOGOUT
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    flash("Logged out successfully", "success")
+    return redirect('/login')
+
+
+# ✅ PLAN TRIP PAGE
+@app.route('/index', methods=['GET', 'POST'])
+def index():
+    if 'user' not in session:
+        flash("Please login first!", "error")
+        return redirect('/login')
+
+    if request.method == 'POST':
+        destination = request.form['destination']
+        days = int(request.form['days'])
+        budget = int(request.form['budget'])
+
+        # Simple calculation
+        hotel = budget * 0.4
+        food = budget * 0.3
+        travel = budget * 0.3
+
+        suggestion = f"Enjoy your trip to {destination}! Plan wisely."
+
+        # SAVE TO DATABASE
+        conn = get_db_connection()
+        cur = conn.cursor()
+
+        cur.execute("""
+            INSERT INTO trips (username, destination, days, total_cost)
+            VALUES (%s, %s, %s, %s)
+        """, (session['user'], destination, days, budget))
+
+        conn.commit()
+        conn.close()
+
+        return render_template('result.html',
+                               destination=destination,
+                               total=budget,
+                               hotel=hotel,
+                               food=food,
+                               travel=travel,
+                               suggestion=suggestion)
+
+    return render_template('index.html')
+
+
+# ✅ DASHBOARD
 @app.route('/dashboard')
 def dashboard():
     if 'user' not in session:
@@ -119,72 +174,23 @@ def dashboard():
                            total_spent=total_spent,
                            total_trips=total_trips)
 
-# ---------------- PLANNER ----------------
-@app.route('/planner')
-def planner():
-    if 'user' not in session:
-        flash("Please login to plan a trip!", "error")
-        return redirect('/login')
 
-    return render_template('planner.html')
-
-# ---------------- RESULT ----------------
-@app.route('/result', methods=['POST'])
-def result():
-    if 'user' not in session:
-        flash("Please login first!", "error")
-        return redirect('/login')
-
-    destination = request.form['destination']
-    days = int(request.form['days'])
-    people = int(request.form['people'])
-    budget = int(request.form['budget'])
-
-    # Cost calculation
-    hotel = days * 1500
-    food = days * 500 * people
-    travel = 2000 * people
-    total = hotel + food + travel
-
-    # 🔥 FIXED Suggestion Logic
-    if total > budget:
-        suggestion = "⚠ Your budget is low. Consider reducing days or expenses."
-    elif total < budget * 0.5:
-        suggestion = "💡 You can upgrade your trip with better hotels!"
-    else:
-        suggestion = "✅ Your budget is perfect!"
-
+# ✅ DELETE TRIP
+@app.route('/delete_trip/<int:id>', methods=['POST'])
+def delete_trip(id):
     conn = get_db_connection()
     cur = conn.cursor()
 
-    cur.execute("""
-        INSERT INTO trips(username,destination,days,people,budget,total_cost)
-        VALUES(%s,%s,%s,%s,%s,%s)
-    """, (session['user'], destination, days, people, budget, total))
-
+    cur.execute("DELETE FROM trips WHERE id = %s", (id,))
+    
     conn.commit()
+    cur.close()
     conn.close()
 
-    flash("Trip calculated successfully!", "success")
+    flash("Trip deleted successfully!", "success")
+    return redirect('/dashboard')
 
-    # ✅ IMPORTANT: Passing suggestion to HTML
-    return render_template('result.html',
-                           destination=destination,
-                           total=total,
-                           budget=budget,
-                           hotel=hotel,
-                           food=food,
-                           travel=travel,
-                           suggestion=suggestion)
 
-# ---------------- LOGOUT ----------------
-@app.route('/logout')
-def logout():
-    session.pop('user', None)
-    flash("Logged out successfully!", "success")
-    return redirect('/')
-
-# ---------------- RUN ----------------
+# ✅ RUN APP (FOR LOCAL ONLY)
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port)
+    app.run(debug=True)
