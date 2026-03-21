@@ -71,8 +71,6 @@ def register():
 
     return render_template('register.html')
 
-
-# ✅ LOGIN
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -86,17 +84,16 @@ def login():
                     (username, password))
         user = cur.fetchone()
 
-        conn.close()
-
         if user:
-            session['user'] = username
+            session['user'] = username   # ✅ MUST
+            print("SESSION SET:", session)  # DEBUG
             flash("Login successful!", "success")
-            return redirect('/index')
+            return redirect('/dashboard')   # ✅ MUST
+
         else:
             flash("Invalid username or password", "error")
 
-    return render_template('login.html')
-
+    return render_template('index.html')
 
 # ✅ LOGOUT
 @app.route('/logout')
