@@ -1,137 +1,81 @@
-/* Background */
-body {
+/* General reset */
+* {
     margin: 0;
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #1d2671, #c33764);
-    color: white;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
 }
 
-/* Centering */
-body, html {
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* Body and background */
+body {
+    background: url('background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    color: #fff;
 }
 
-/* Glass card */
-form, .container, .result-box {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 30px;
-    border-radius: 20px;
-    backdrop-filter: blur(15px);
-    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
-    width: 320px;
-    text-align: center;
-}
-
-/* Heading */
-h2 {
-    margin-bottom: 20px;
-}
-
-/* Inputs */
-input {
-    width: 90%;
-    padding: 12px;
-    margin: 10px 0;
-    border-radius: 10px;
-    border: none;
-    outline: none;
-}
-
-/* Button */
-button {
-    width: 95%;
-    padding: 12px;
-    margin-top: 15px;
-    border: none;
-    border-radius: 10px;
-    background: linear-gradient(45deg, #ff6a00, #ee0979);
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-button:hover {
-    transform: scale(1.05);
-}
-
-/* Links */
-a {
-    color: #ffd700;
-    text-decoration: none;
-}
-
-/* Dashboard */
-table {
-    margin-top: 20px;
-    border-collapse: collapse;
-    width: 90%;
-    background: rgba(255,255,255,0.1);
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-th, td {
-    padding: 12px;
-    text-align: center;
-}
-
-th {
-    background: rgba(0,0,0,0.3);
-}
-
-/* Delete button */
-.delete-btn {
-    background: transparent;
-    color: red;
-    font-size: 22px;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.delete-btn:hover {
-    color: darkred;
-    transform: scale(1.2);
-}
-
-/* Flash messages */
-.flash {
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 10px;
-}
-
-.flash.success {
-    background: #00c851;
-}
-
-.flash.error {
-    background: #ff4444;
-}
-
-/* Image */
-.trip-img {
-    width: 100%;
-    max-width: 350px;
-    border-radius: 15px;
-    margin-top: 20px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-}
-
-/* Navbar style */
+/* Navbar styling */
 .navbar {
-    position: absolute;
-    top: 20px;
-    width: 90%;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 15px 50px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 100;
+    border-bottom: 2px solid #ffcc00;
+}
+
+.navbar div:first-child {
+    font-size: 24px;
+    font-weight: bold;
 }
 
 .navbar a {
-    margin: 0 10px;
+    color: #fff;
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 18px;
+    transition: color 0.3s;
+}
+
+.navbar a:hover {
+    color: #ffcc00;
+}
+
+/* Container for page content */
+.container {
+    padding: 120px 50px 50px 50px; /* account for fixed navbar */
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* Buttons */
+.button {
+    display: inline-block;
+    background: #ffcc00;
+    color: #000;
+    padding: 12px 25px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
     font-weight: bold;
+    transition: background 0.3s;
+}
+
+.button:hover {
+    background: #e6b800;
+}
+
+/* Cards */
+.card {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    border-radius: 15px;
+    margin: 20px 0;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
 }
