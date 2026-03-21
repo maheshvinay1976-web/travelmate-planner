@@ -1,37 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
     <title>Register</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 
-<div class="container">
+<form method="POST">
+    <h2>Register</h2>
 
-    <!-- Flash Messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% for category, message in messages %}
-        <div class="flash {{ category }}">{{ message }}</div>
-      {% endfor %}
-    {% endwith %}
+    <input name="username" placeholder="Username" required>
+    <input type="password" name="password" placeholder="Password" required>
 
-    <h2>📝 Create Account</h2>
+    <button type="submit">Register</button>
 
-    <form method="POST" class="form-box">
-        <input name="username" placeholder="Enter Username" required>
-        <input type="password" name="password" placeholder="Enter Password" required>
-
-        <button>Register</button>
-    </form>
-
-    <p>Already have an account? <a href="/login">Login</a></p>
-
-</div>
-
-<footer class="footer">
-    <p>© 2026 TravelMate Planner | Developed by Vinay M</p>
-</footer>
+    <p>Already have account? <a href="/login">Login</a></p>
+</form>
 
 </body>
 </html>
