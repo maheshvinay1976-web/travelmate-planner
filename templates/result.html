@@ -1,32 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Result</title>
-    <link rel="stylesheet" href="/static/style.css">
-</head>
-<body>
-<div class="navbar">
-    <div>🌍 TravelMate</div>
-    <div>
-        <a href="dashboard.html">Dashboard</a>
-        <a href="plan.html">Plan</a>
-        <a href="profile.html">Profile</a>
-        <a href="logout.html">Logout</a>
-    </div>
+{% extends 'base.html' %}
+{% block content %}
+<div class="glass-card result-card">
+    <h2>Trip Planned Successfully!</h2>
+    <p>Destination: <strong>{{ destination }}</strong></p>
+    <p>Number of Days: <strong>{{ days }}</strong></p>
+    <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Back to Dashboard</a>
 </div>
-<h2>Trip to {{ destination }}</h2>
-
-<img src="https://source.unsplash.com/400x300/?{{ destination }}" class="trip-img">
-
-<p>Total Cost: ₹{{ total }}</p>
-<p>Budget: ₹{{ budget }}</p>
-<p>Hotel: ₹{{ hotel }}</p>
-<p>Food: ₹{{ food }}</p>
-<p>Travel: ₹{{ travel }}</p>
-
-<h3>{{ suggestion }}</h3>
-
-<a href="/dashboard">Back to Dashboard</a>
-
-</body>
-</html>
+{% endblock %}
