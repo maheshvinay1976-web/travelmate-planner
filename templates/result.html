@@ -1,105 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Trip Result</title>
+    <title>Result</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 
-<div class="container">
+<h2>Trip to {{ destination }}</h2>
 
-    <!-- 🔔 Flash Messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% for category, message in messages %}
-        <div class="flash {{ category }}">{{ message }}</div>
-      {% endfor %}
-    {% endwith %}
+<img src="https://source.unsplash.com/400x300/?{{ destination }}" class="trip-img">
 
-    <h2>📊 Trip Summary</h2>
+<p>Total Cost: ₹{{ total }}</p>
+<p>Budget: ₹{{ budget }}</p>
+<p>Hotel: ₹{{ hotel }}</p>
+<p>Food: ₹{{ food }}</p>
+<p>Travel: ₹{{ travel }}</p>
 
-    <div class="result-box">
+<h3>{{ suggestion }}</h3>
 
-        <h3>{{ destination }}</h3>
-
-        <!-- 🌍 Advanced Image System -->
-        {% set place = destination.lower() %}
-
-        {% if "goa" in place %}
-            <img src="https://images.unsplash.com/photo-1587922546307-776227941871" class="trip-img">
-
-        {% elif "paris" in place %}
-            <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34" class="trip-img">
-
-        {% elif "manali" in place %}
-            <img src="https://images.unsplash.com/photo-1605540436563-5bca919ae766" class="trip-img">
-
-        {% elif "delhi" in place %}
-            <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5" class="trip-img">
-
-        {% elif "mumbai" in place %}
-            <img src="https://images.unsplash.com/photo-1562979314-bee7453e911c" class="trip-img">
-
-        {% elif "bangalore" in place %}
-            <img src="https://images.unsplash.com/photo-1581093588401-22d1c8bcb78f" class="trip-img">
-
-        {% else %}
-            <img src="https://picsum.photos/400/300" class="trip-img">
-        {% endif %}
-
-        <!-- 💰 Details -->
-        <p>💰 Total Cost: ₹{{ total }}</p>
-        <p>🎯 Budget: ₹{{ budget }}</p>
-
-        {% if total > budget %}
-            <p class="warning">⚠ Budget Exceeded</p>
-        {% else %}
-            <p class="success">✅ Perfect Plan</p>
-        {% endif %}
-
-        <!-- 🤖 Suggestion -->
-        <p style="font-weight:bold;">🤖 Suggestion: {{ suggestion }}</p>
-
-    </div>
-
-    <!-- 📊 Chart -->
-    <h3>📊 Expense Breakdown</h3>
-    <canvas id="myChart" width="300" height="300"></canvas>
-
-    <br>
-
-    <!-- Buttons -->
-    <a href="/planner"><button>🔄 Plan Again</button></a>
-    <a href="/dashboard"><button>📂 Dashboard</button></a>
-
-</div>
-
-<!-- Footer -->
-<footer class="footer">
-    <p>© 2026 TravelMate Planner | Developed by Vinay M</p>
-</footer>
-
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<script>
-var ctx = document.getElementById('myChart').getContext('2d');
-
-new Chart(ctx, {
-    type: 'pie',
-    data: {
-        labels: ['Hotel 🏨', 'Food 🍔', 'Travel 🚗'],
-        datasets: [{
-            data: [{{ hotel }}, {{ food }}, {{ travel }}],
-            backgroundColor: [
-                '#ff6a00',
-                '#00c851',
-                '#33b5e5'
-            ]
-        }]
-    }
-});
-</script>
+<a href="/dashboard">Back to Dashboard</a>
 
 </body>
 </html>
