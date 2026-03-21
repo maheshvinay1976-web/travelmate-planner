@@ -45,6 +45,7 @@ def init_db():
 
 init_db()
 
+
 # ================= ROUTES =================
 
 @app.route('/')
@@ -164,7 +165,7 @@ def plan():
     return render_template('plan.html')
 
 
-# -------- DELETE --------
+# -------- DELETE TRIP --------
 @app.route('/delete_trip/<int:id>', methods=['POST'])
 def delete_trip(id):
     conn = get_db_connection()
@@ -175,7 +176,7 @@ def delete_trip(id):
 
     conn.close()
 
-    flash("Trip deleted!", "success")
+    flash("Trip deleted successfully!", "success")
     return redirect('/dashboard')
 
 
