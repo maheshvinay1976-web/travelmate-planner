@@ -1,45 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <link rel="stylesheet" href="/static/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - TravelMate</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
+
 <div class="navbar">
     <div>🌍 TravelMate</div>
     <div>
-        <a href="dashboard.html">Dashboard</a>
-        <a href="plan.html">Plan</a>
-        <a href="profile.html">Profile</a>
-        <a href="logout.html">Logout</a>
+        <a href="index.html">Home</a>
+        <a href="login.html">Login</a>
+        <a href="register.html">Register</a>
     </div>
 </div>
+
 <div class="container">
-
-    <!-- ✅ FLASH MESSAGES HERE -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% for category, message in messages %}
-        <div class="flash {{ category }}">{{ message }}</div>
-      {% endfor %}
-    {% endwith %}
-
-    <h2>🔐 Login</h2>
-
-    <form method="POST" class="form-box">
-        <input name="username" placeholder="Enter Username" required>
-        <input type="password" name="password" placeholder="Enter Password" required>
-
-        <button>Login</button>
-    </form>
-
-    <p>Don't have an account? <a href="/register">Register</a></p>
-
+    <div class="card">
+        <h2>Login to TravelMate</h2>
+        <form>
+            <input type="text" placeholder="Username" required>
+            <input type="password" placeholder="Password" required>
+            <button class="button" type="submit">Login</button>
+        </form>
+    </div>
 </div>
-
-<footer class="footer">
-    <p>© 2026 TravelMate Planner | Developed by Vinay M</p>
-</footer>
 
 </body>
 </html>
