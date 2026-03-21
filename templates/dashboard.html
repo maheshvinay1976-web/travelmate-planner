@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="/static/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard - TravelMate</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
+
 <div class="navbar">
     <div>🌍 TravelMate</div>
     <div>
@@ -14,35 +17,22 @@
         <a href="logout.html">Logout</a>
     </div>
 </div>
-<h2>Your Trips</h2>
 
-<a href="/plan">➕ Plan Trip</a>
-<a href="/logout">🚪 Logout</a>
+<div class="container">
+    <h1>Welcome to Your Dashboard</h1>
+    <p>Manage your trips, see recommendations, and stay inspired!</p>
 
-<h3>Total Trips: {{ total_trips }}</h3>
-<h3>Total Spent: ₹{{ total_spent }}</h3>
+    <div class="card">
+        <h2>Upcoming Trips</h2>
+        <p>You have no trips planned yet.</p>
+        <a href="plan.html" class="button">Plan a Trip</a>
+    </div>
 
-<table>
-<tr>
-    <th>Destination</th>
-    <th>Days</th>
-    <th>Cost</th>
-    <th>❌</th>
-</tr>
-
-{% for trip in trips %}
-<tr>
-    <td>{{ trip[2] }}</td>
-    <td>{{ trip[3] }}</td>
-    <td>₹{{ trip[4] }}</td>
-    <td>
-        <form action="/delete_trip/{{ trip[0] }}" method="POST">
-            <button class="delete-btn">×</button>
-        </form>
-    </td>
-</tr>
-{% endfor %}
-</table>
+    <div class="card">
+        <h2>Travel Insights</h2>
+        <p>Explore travel articles, tips, and new destinations.</p>
+    </div>
+</div>
 
 </body>
 </html>
