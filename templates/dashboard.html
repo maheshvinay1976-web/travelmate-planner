@@ -1,47 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
     <title>Dashboard</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-<div class="container">
+<h2>📂 Your Trips</h2>
 
-    <!-- Flash Messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% for category, message in messages %}
-        <div class="flash {{ category }}">{{ message }}</div>
-      {% endfor %}
-    {% endwith %}
+<a href="/index">➕ Plan New Trip</a> |
+<a href="/logout">🚪 Logout</a>
 
-    <h2>📂 Your Trips</h2>
+<br><br>
 
-    <a href="/planner"><button>➕ Plan New Trip</button></a>
-    <a href="/logout"><button>🚪 Logout</button></a>
+<!-- Flash Messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, message in messages %}
+    <div class="flash {{ category }}">{{ message }}</div>
+  {% endfor %}
+{% endwith %}
 
-    <table>
-        <tr>
-            <th>Destination</th>
-            <th>Days</th>
-            <th>Cost</th>
-        </tr>
+<table border="1" cellpadding="10">
+    <tr>
+        <th>Destination</th>
+        <th>Days</th>
+        <th>Cost</th>
+        <th>Action</th>
+    </tr>
 
-        {% for trip in trips %}
-        <tr>
-            <td>{{ trip[2] }}</td>
-            <td>{{ trip[3] }}</td>
-            <td>₹{{ trip[6] }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-
-</div>
-
-<footer class="footer">
-    <p>© 2026 TravelMate Planner | Developed by Vinay M</p>
-</footer>
+    {% for trip in trips %}
+    <tr>
+        <td>{{ trip.destination }}</td>
+        <td>{{ trip.days }}</td>
+        <td>₹{{ trip.cost }}</td>
+        <td>
+            <form action="/delete_trip/{{ trip.id }}" method="POST">
+                <button class="delete-btn" title="Delete Trip">&times;</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
 
 </body>
 </html>
