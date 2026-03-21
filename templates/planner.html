@@ -2,10 +2,20 @@
 {% block content %}
 <div class="glass-card planner-card">
     <h2>Plan Your Trip</h2>
-    <form method="POST">
-        <input type="text" name="destination" placeholder="Destination" required>
-        <input type="number" name="days" placeholder="Number of Days" required>
-        <button type="submit" class="btn btn-success">Plan Trip</button>
+    <form action="{{ url_for('plan') }}" method="POST">
+    <label for="destination">Destination:</label>
+    <input type="text" name="destination" required>
+
+    <label for="days">Number of Days:</label>
+    <input type="number" name="days" required>
+
+    <label for="budget">Budget (₹):</label>
+    <input type="number" name="budget" required>
+
+    <label for="members">Number of Members:</label>
+    <input type="number" name="members" required>
+
+    <button type="submit">Plan Trip</button>
     </form>
 </div>
 {% endblock %}
