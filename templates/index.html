@@ -1,37 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TravelMate Planner</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-<div class="navbar">
-    <div>🌍 TravelMate</div>
-    <div>
-        <a href="index.html">Home</a>
-        <a href="login.html">Login</a>
-        <a href="register.html">Register</a>
-    </div>
+{% extends 'base.html' %}
+{% block content %}
+<div class="glass-card home-card">
+    <h1>Welcome to TravelMate Planner</h1>
+    <p>Plan your trips smartly and easily.</p>
+    <a href="{{ url_for('register') }}" class="btn btn-primary">Get Started</a>
 </div>
-
-<div class="container">
-    <h1>Plan Your Perfect Trip</h1>
-    <p>TravelMate helps you organize trips, explore destinations, and make memories.</p>
-    <a href="register.html" class="button">Get Started</a>
-
-    <div class="card">
-        <h2>Top Destinations</h2>
-        <p>Discover the most popular travel spots this year!</p>
-    </div>
-
-    <div class="card">
-        <h2>Travel Tips</h2>
-        <p>Learn how to make your journey more enjoyable and safe.</p>
-    </div>
-</div>
-
-</body>
-</html>
+{% endblock %}
