@@ -4,7 +4,8 @@ import os
 
 app = Flask(__name__)
 app.secret_key = "secret123"   # change later for security
-
+app.config['SESSION_COOKIE_SECURE'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
 # ✅ DATABASE CONNECTION
 def get_db_connection():
