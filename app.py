@@ -1,192 +1,106 @@
-from flask import Flask, render_template, request, redirect, session, flash
-import psycopg2
+from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 import os
 
 app = Flask(__name__)
-app.secret_key = "secret123"
+app.secret_key = "travelmate_secret_key"
 
-# ✅ Important for Render
-app.config['SESSION_COOKIE_SECURE'] = True
-app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+# Database
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 
+# User model
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(50), unique=True, nullable=False)
+    email = db.Column(db.String(50), unique=True, nullable=False)
+    password = db.Column(db.String(200), nullable=False)
 
-# ================= DATABASE =================
-
-def get_db_connection():
-    return psycopg2.connect(os.environ.get("DATABASE_URL"))
-
-
-def init_db():
-    conn = get_db_connection()
-    cur = conn.cursor()
-
-    cur.execute("""
-    CREATE TABLE IF NOT EXISTS users (
-        id SERIAL PRIMARY KEY,
-        username TEXT,
-        password TEXT
-    )
-    """)
-
-    cur.execute("""
-    CREATE TABLE IF NOT EXISTS trips (
-        id SERIAL PRIMARY KEY,
-        username TEXT,
-        destination TEXT,
-        days INTEGER,
-        total_cost INTEGER
-    )
-    """)
-
-    conn.commit()
-    cur.close()
-    conn.close()
-
-
-init_db()
-
-
-# ================= ROUTES =================
-
+# Home Page
 @app.route('/')
-def home():
-    return redirect('/login')
+def index():
+    return render_template('index.html')
 
-
-# -------- REGISTER --------
+# Register
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         username = request.form['username']
-        password = request.form['password']
+        email = request.form['email']
+        password = generate_password_hash(request.form['password'])
+        
+        if User.query.filter_by(email=email).first():
+            flash("Email already exists!", "danger")
+            return redirect(url_for('register'))
 
-        conn = get_db_connection()
-        cur = conn.cursor()
-
-        cur.execute("INSERT INTO users (username, password) VALUES (%s, %s)",
-                    (username, password))
-
-        conn.commit()
-        conn.close()
-
-        flash("Registration successful! Please login.", "success")
-        return redirect('/login')
-
+        new_user = User(username=username, email=email, password=password)
+        db.session.add(new_user)
+        db.session.commit()
+        flash("Registered Successfully! Please login.", "success")
+        return redirect(url_for('login'))
     return render_template('register.html')
 
-
-# -------- LOGIN --------
+# Login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
+        email = request.form['email']
         password = request.form['password']
-
-        conn = get_db_connection()
-        cur = conn.cursor()
-
-        cur.execute("SELECT * FROM users WHERE username=%s AND password=%s",
-                    (username, password))
-        user = cur.fetchone()
-
-        if user:
-            session['user'] = username
-            flash("Login successful!", "success")
-            return redirect('/dashboard')
+        user = User.query.filter_by(email=email).first()
+        if user and check_password_hash(user.password, password):
+            session['user_id'] = user.id
+            session['username'] = user.username
+            flash("Login Successful!", "success")
+            return redirect(url_for('dashboard'))
         else:
-            flash("Invalid username or password", "error")
+            flash("Invalid Credentials!", "danger")
+            return redirect(url_for('login'))
+    return render_template('login.html')
 
-    return render_template('index.html')
-
-
-# -------- DASHBOARD --------
+# Dashboard
 @app.route('/dashboard')
 def dashboard():
-    if 'user' not in session:
-        flash("Please login first!", "error")
-        return redirect('/login')
+    if 'user_id' not in session:
+        flash("Please login first!", "warning")
+        return redirect(url_for('login'))
+    return render_template('dashboard.html')
 
-    conn = get_db_connection()
-    cur = conn.cursor()
-
-    cur.execute("SELECT * FROM trips WHERE username=%s", (session['user'],))
-    trips = cur.fetchall()
-
-    cur.execute("SELECT SUM(total_cost) FROM trips WHERE username=%s", (session['user'],))
-    total_spent = cur.fetchone()[0] or 0
-
-    cur.execute("SELECT COUNT(*) FROM trips WHERE username=%s", (session['user'],))
-    total_trips = cur.fetchone()[0]
-
-    conn.close()
-
-    return render_template('dashboard.html',
-                           trips=trips,
-                           total_spent=total_spent,
-                           total_trips=total_trips)
-
-
-# -------- PLAN TRIP --------
+# Planner Page
 @app.route('/plan', methods=['GET', 'POST'])
 def plan():
-    if 'user' not in session:
-        return redirect('/login')
-
+    if 'user_id' not in session:
+        flash("Please login first!", "warning")
+        return redirect(url_for('login'))
+    
     if request.method == 'POST':
+        # Example: Collect trip info
         destination = request.form['destination']
-        days = int(request.form['days'])
-        budget = int(request.form['budget'])
+        days = request.form['days']
+        flash(f"Trip to {destination} planned for {days} days!", "success")
+        return redirect(url_for('result', destination=destination, days=days))
+    return render_template('planner.html')
 
-        hotel = days * 2000
-        food = days * 1000
-        travel = 3000
-        total = hotel + food + travel
+# Result Page
+@app.route('/result')
+def result():
+    if 'user_id' not in session:
+        flash("Please login first!", "warning")
+        return redirect(url_for('login'))
+    
+    destination = request.args.get('destination')
+    days = request.args.get('days')
+    return render_template('result.html', destination=destination, days=days)
 
-        suggestion = "Within Budget ✅" if total <= budget else "Over Budget ⚠️"
-
-        conn = get_db_connection()
-        cur = conn.cursor()
-
-        cur.execute("INSERT INTO trips (username, destination, days, total_cost) VALUES (%s,%s,%s,%s)",
-                    (session['user'], destination, days, total))
-
-        conn.commit()
-        conn.close()
-
-        return render_template('result.html',
-                               destination=destination,
-                               total=total,
-                               budget=budget,
-                               hotel=hotel,
-                               food=food,
-                               travel=travel,
-                               suggestion=suggestion)
-
-    return render_template('plan.html')
-
-
-# -------- DELETE TRIP --------
-@app.route('/delete_trip/<int:id>', methods=['POST'])
-def delete_trip(id):
-    conn = get_db_connection()
-    cur = conn.cursor()
-
-    cur.execute("DELETE FROM trips WHERE id = %s", (id,))
-    conn.commit()
-
-    conn.close()
-
-    flash("Trip deleted successfully!", "success")
-    return redirect('/dashboard')
-
-
-# -------- LOGOUT --------
+# Logout
 @app.route('/logout')
 def logout():
     session.clear()
-    return redirect('/login')
+    flash("Logged out successfully!", "success")
+    return redirect(url_for('login'))
 
-
-# ================= RUN =================
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+    if not os.path.exists("database.db"):
+        db.create_all()
+    app.run(debug=True)
