@@ -106,3 +106,35 @@ canvas {
 .trip-img:hover {
     transform: scale(1.05);
 }
+
+/* Delete button style */
+.delete-btn {
+    background: transparent;
+    color: red;
+    font-size: 22px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.delete-btn:hover {
+    color: darkred;
+    transform: scale(1.2);
+}
+
+/* Flash messages */
+.flash {
+    padding: 10px;
+    margin: 10px;
+    border-radius: 8px;
+}
+
+.flash.success {
+    background: green;
+    color: white;
+}
+
+.flash.error {
+    background: red;
+    color: white;
+}
