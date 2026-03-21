@@ -75,20 +75,21 @@ def plan():
     if 'user_id' not in session:
         flash("Please login first!", "warning")
         return redirect(url_for('login'))
-
+    
     if request.method == 'POST':
         destination = request.form['destination']
         days = int(request.form['days'])
         budget = int(request.form['budget'])
         members = int(request.form['members'])
 
-        # Simple calculation: total cost = 1000 per day per member + 5000 fixed
-        total_cost = members * days * 1000 + 5000
-
-        return redirect(url_for('result', destination=destination, days=days,
-                                budget=budget, members=members, total_cost=total_cost))
+        # Store values or calculate result
+        flash(f"Trip to {destination} planned for {days} days!", "success")
+        return redirect(url_for('result', 
+                                destination=destination,
+                                days=days,
+                                budget=budget,
+                                members=members))
     return render_template('planner.html')
-
 # Trip Result
 @app.route('/result')
 def result():
