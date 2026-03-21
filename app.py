@@ -134,12 +134,11 @@ def logout():
     flash("Logged out successfully!", "success")
     return redirect(url_for('login'))
 
-# ----------------- Create tables if not exists -----------------
-@app.before_first_request
-def create_tables():
-    db.create_all()
-
 # ----------------- Run App -----------------
 if __name__ == '__main__':
+    # Create database tables at startup
+    with app.app_context():
+        db.create_all()
+
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port, debug=True)
