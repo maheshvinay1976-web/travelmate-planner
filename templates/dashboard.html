@@ -1,8 +1,0 @@
-{% extends 'base.html' %}
-{% block content %}
-<div class="glass-card dashboard-card">
-    <h2>Hello, {{ session.get('username') }}!</h2>
-    <p>Welcome to your dashboard.</p>
-    <a href="{{ url_for('plan') }}" class="btn btn-warning">Plan a Trip</a>
-</div>
-{% endblock %}
