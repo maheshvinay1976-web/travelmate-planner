@@ -1,6 +1,25 @@
-<h2>Your Trip Plan</h2>
+<h2>🌍 Your Smart Trip Plan</h2>
 
-<p>Destination: {{ destination }}</p>
-<p>Total Cost: ₹{{ total }}</p>
+<h3>📍 Destination: {{ destination }}</h3>
+<p>🏨 Hotel Type: {{ hotel_type }}</p>
 
-<a href="/dashboard">Back</a>
+<h3>💰 Cost Breakdown</h3>
+<ul>
+    <li>Hotel: ₹{{ hotel }}</li>
+    <li>Food: ₹{{ food }}</li>
+    <li>Travel: ₹{{ travel }}</li>
+    <li><strong>Total: ₹{{ total }}</strong></li>
+</ul>
+
+<h3>📅 Itinerary</h3>
+<ul>
+    {% for day in itinerary %}
+        <li>{{ day }}</li>
+    {% endfor %}
+</ul>
+
+<h3>🧠 Smart Suggestion</h3>
+<p>{{ suggestion }}</p>
+
+<br>
+<a href="/dashboard">⬅ Back</a>
