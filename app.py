@@ -97,7 +97,7 @@ def recommend_plan(budget, days):
     return destination, hotel_type
     
         # Cost Calculation
-        def calculate_cost(days, people):
+def calculate_cost(days, people):
     hotel = days * 1200
     food = days * 600 * people
     travel = 2500
