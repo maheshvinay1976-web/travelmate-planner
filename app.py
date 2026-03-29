@@ -83,7 +83,7 @@ def plan():
 
         # AI Logic
         if budget < 5000:
-            destination = "Hampi"
+            destination = "Hampi/TB Dam/kishkindha"
         elif budget < 20000:
             destination = "Goa / Mysore / Ooty"
         else:
