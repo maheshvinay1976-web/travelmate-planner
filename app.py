@@ -82,22 +82,78 @@ def plan():
         people = int(request.form['people'])
 
         # AI Logic
-        if budget < 5000:
-            destination = "Hampi/TB Dam/kishkindha"
-        elif budget < 20000:
-            destination = "Goa / Mysore / Ooty"
-        else:
-            destination = "Manali / Kashmir"
+        def recommend_plan(budget, days):
+    if budget < 5000:
+        destination = "Nearby Places"
+        hotel_type = "Budget Stay"
+    elif budget < 20000:
+        destination = "Goa / Mysore / Ooty"
+        hotel_type = "3 Star Hotel"
+    else:
+        destination = "Manali / Kashmir"
+        hotel_type = "5 Star Hotel"
 
+    return destination, hotel_type
+    
         # Cost Calculation
-        hotel = days * 1000
-        food = days * 500 * people
-        travel = 2000
-        total = hotel + food + travel
+        def calculate_cost(days, people):
+    hotel = days * 1200
+    food = days * 600 * people
+    travel = 2500
+
+    total = hotel + food + travel
+
+    return hotel, food, travel, total
 
         return render_template('result.html',
                                destination=destination,
                                total=total)
+
+    return render_template('plan.html')
+
+def generate_itinerary(days):
+    itinerary = []
+
+    for i in range(1, days + 1):
+        if i == 1:
+            plan = "Arrival & Local Sightseeing"
+        elif i == days:
+            plan = "Shopping & Departure"
+        else:
+            plan = "Explore Tourist Places & Activities"
+
+        itinerary.append(f"Day {i}: {plan}")
+
+    return itinerary
+@app.route('/plan', methods=['GET', 'POST'])
+def plan():
+    if request.method == 'POST':
+        budget = int(request.form['budget'])
+        days = int(request.form['days'])
+        people = int(request.form['people'])
+
+        destination, hotel_type = recommend_plan(budget, days)
+
+        hotel, food, travel, total = calculate_cost(days, people)
+
+        itinerary = generate_itinerary(days)
+
+        # Smart suggestion
+        suggestion = ""
+        if budget < 5000:
+            suggestion = "Budget is low, try reducing number of days."
+        elif budget > 30000:
+            suggestion = "You can upgrade to premium experiences!"
+
+        return render_template('result.html',
+                               destination=destination,
+                               hotel_type=hotel_type,
+                               hotel=hotel,
+                               food=food,
+                               travel=travel,
+                               total=total,
+                               itinerary=itinerary,
+                               suggestion=suggestion)
 
     return render_template('plan.html')
 
