@@ -82,7 +82,8 @@ def plan():
         people = int(request.form['people'])
 
         # AI Logic
-        def recommend_plan(budget, days):
+   # AI Logic
+def recommend_plan(budget, days):
     if budget < 5000:
         destination = "Nearby Places"
         hotel_type = "Budget Stay"
