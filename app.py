@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, session
 import sqlite3
+import os
 
 app = Flask(__name__)
 app.secret_key = "secret123"
@@ -73,16 +74,7 @@ def dashboard():
         return redirect('/login')
     return render_template('dashboard.html')
 
-# ---------- PLAN ----------
-@app.route('/plan', methods=['GET', 'POST'])
-def plan():
-    if request.method == 'POST':
-        budget = int(request.form['budget'])
-        days = int(request.form['days'])
-        people = int(request.form['people'])
-
-        # AI Logic
-   # AI Logic
+# ---------- AI LOGIC ----------
 def recommend_plan(budget, days):
     if budget < 5000:
         destination = "Nearby Places"
@@ -95,8 +87,8 @@ def recommend_plan(budget, days):
         hotel_type = "5 Star Hotel"
 
     return destination, hotel_type
-    
-        # Cost Calculation
+
+# ---------- COST ----------
 def calculate_cost(days, people):
     hotel = days * 1200
     food = days * 600 * people
@@ -106,12 +98,7 @@ def calculate_cost(days, people):
 
     return hotel, food, travel, total
 
-        return render_template('result.html',
-                               destination=destination,
-                               total=total)
-
-    return render_template('plan.html')
-
+# ---------- ITINERARY ----------
 def generate_itinerary(days):
     itinerary = []
 
@@ -126,6 +113,8 @@ def generate_itinerary(days):
         itinerary.append(f"Day {i}: {plan}")
 
     return itinerary
+
+# ---------- PLAN ----------
 @app.route('/plan', methods=['GET', 'POST'])
 def plan():
     if request.method == 'POST':
@@ -133,20 +122,23 @@ def plan():
         days = int(request.form['days'])
         people = int(request.form['people'])
 
+        # AI
         destination, hotel_type = recommend_plan(budget, days)
 
+        # Cost
         hotel, food, travel, total = calculate_cost(days, people)
 
+        # Itinerary
         itinerary = generate_itinerary(days)
 
-        # Smart suggestion
+        # Suggestion
         suggestion = ""
         if budget < 5000:
             suggestion = "Budget is low, try reducing number of days."
         elif budget > 30000:
             suggestion = "You can upgrade to premium experiences!"
 
-    return render_template('result.html',
+        return render_template('result.html',
                                destination=destination,
                                hotel_type=hotel_type,
                                hotel=hotel,
@@ -164,7 +156,6 @@ def logout():
     session.pop('user', None)
     return redirect('/login')
 
-import os
-
+# ---------- RUN ----------
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
