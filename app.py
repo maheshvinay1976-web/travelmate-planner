@@ -146,7 +146,7 @@ def plan():
         elif budget > 30000:
             suggestion = "You can upgrade to premium experiences!"
 
-        return render_template('result.html',
+    return render_template('result.html',
                                destination=destination,
                                hotel_type=hotel_type,
                                hotel=hotel,
